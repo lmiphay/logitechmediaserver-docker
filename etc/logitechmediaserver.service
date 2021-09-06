@@ -1,0 +1,16 @@
+[Unit]
+Description=Logitechmediaserver Service
+After=network-online.target
+Description=Logitechmediaserver Docker Appliance Service
+Documentation=man:logitechmediaserver-docker(8)
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=LOGITECHMEDIASERVER_DOCKER_CONFIG=/etc/logitechmediaserver.conf
+WorkingDirectory=/var/tmp
+ExecStart=/usr/bin/logitechmediaserver-docker start
+ExecStop=/usr/bin/logitechmediaserver-docker stop
+
+[Install]
+WantedBy=multi-user.target

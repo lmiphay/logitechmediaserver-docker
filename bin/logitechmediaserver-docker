@@ -1,0 +1,62 @@
+#!/bin/bash
+
+lms_version=${lms_version:-8.2.0}
+
+lms_config=${lms_config:-/music/config}
+lms_music=${lms_music:-/music/music}
+lms_playlist=${lms_playlist:-/music/playlist}
+
+# mappings for specific ports; other option is --net=host
+# spotify 4070
+lms_host_web_port=${lms_host_web_port:-9000} # TCP web UI
+lms_host_cli_port=${lms_host_cli_port:-9090} # TCP server CLI
+lms_host_players_port=${lms_host_players_port:-3483} # TCP/UDP control channel for client players (UDP is for discovery)
+lms_host_firmware_port=${lms_host_firmware_port:-31337} # firmware updates
+
+LMS_DOCKER_CONFIG=${LMS_DOCKER_CONFIG:-/etc/logitechmediaserver.conf}
+
+if [ -n "${LMS_DOCKER_CONFIG}" -a -f "${LMS_DOCKER_CONFIG}" ] ; then source "${LMS_DOCKER_CONFIG}" ; fi
+
+case "$1" in
+    pull)
+	docker pull "lmscommunity/logitechmediaserver:${lms_version}"
+	;;
+    create)
+	docker create \
+	       --name logitechmediaserver \
+	       -v "${lms_config}":"/config":rw \
+	       -v "${lms_music}":"/music":ro \
+	       -v "${lms_playlist}":"/playlist":rw \
+	       -v "/etc/localtime":"/etc/localtime":ro \
+	       -v "/etc/timezone":"/etc/timezone":ro \
+	       -p "${lms_host_web_port}:9000/tcp" \
+	       -p "${lms_host_cli_port}:9090/tcp" \
+	       -p "${lms_host_players_port}:3483/tcp" \
+	       -p "${lms_host_players_port}:3483/udp" \
+	       -p "${lms_host_firmware_port}:31337/tcp" \
+	       "lmscommunity/logitechmediaserver:${lms_version}"
+	;;
+    start|run)
+	[ ! -d "${lms_config}" ] && mkdir -p "${lms_config}"
+	[ ! -d "${lms_music}" ] && mkdir -p "${lms_music}"
+	[ ! -d "${lms_playlist}" ] && mkdir -p "${lms_playlist}"
+	docker start logitechmediaserver
+	;;
+    stop)
+	docker stop logitechmediaserver
+	;;
+    delete|rm)
+	docker rm logitechmediaserver
+	;;
+    logs)
+	docker logs -f logitechmediaserver
+	;;
+    settings)
+	set | egrep '^lms_' | sort
+	;;
+    *)
+	echo "Usage: $(basename $0) {pull|create|start|stop|delete|logs|settings}"
+	;;
+esac
+
+exit 0

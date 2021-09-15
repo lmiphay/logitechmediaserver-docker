@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lms_version=${lms_version:-8.2.0}
+lms_version=${lms_version:-8.2.1}
 
 lms_config=${lms_config:-/music/config}
 lms_music=${lms_music:-/music/music}

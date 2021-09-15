@@ -7,12 +7,14 @@ lms_config=${lms_config:-/music/config}
 lms_music=${lms_music:-/music/music}
 lms_playlist=${lms_playlist:-/music/playlist}
 
-# mappings for specific ports; other option is --net=host
-# spotify 4070
+lms_host_net=${lms_host_net:-"TRUE"}
+
+# mappings for specific ports
 lms_host_web_port=${lms_host_web_port:-9000} # TCP web UI
 lms_host_cli_port=${lms_host_cli_port:-9090} # TCP server CLI
 lms_host_players_port=${lms_host_players_port:-3483} # TCP/UDP control channel for client players (UDP is for discovery)
 lms_host_firmware_port=${lms_host_firmware_port:-31337} # firmware updates
+# spotify 4070
 
 LMS_DOCKER_CONFIG=${LMS_DOCKER_CONFIG:-/etc/logitechmediaserver.conf}
 
@@ -23,6 +25,16 @@ case "$1" in
 	docker pull "lmscommunity/logitechmediaserver:${lms_version}"
 	;;
     create)
+	if [ "${lms_host_net}" = "TRUE" ] ; then
+	    net="--net=host"
+	else
+	    net="
+	       -p ${lms_host_web_port}:9000/tcp
+	       -p ${lms_host_cli_port}:9090/tcp
+	       -p ${lms_host_players_port}:3483/tcp
+	       -p ${lms_host_players_port}:3483/udp
+	       -p ${lms_host_firmware_port}:31337/tcp"
+	fi
 	docker create \
 	       --name logitechmediaserver \
 	       --hostname "${lms_hostname}" \
@@ -31,11 +43,7 @@ case "$1" in
 	       -v "${lms_playlist}":"/playlist":rw \
 	       -v "/etc/localtime":"/etc/localtime":ro \
 	       -v "/etc/timezone":"/etc/timezone":ro \
-	       -p "${lms_host_web_port}:9000/tcp" \
-	       -p "${lms_host_cli_port}:9090/tcp" \
-	       -p "${lms_host_players_port}:3483/tcp" \
-	       -p "${lms_host_players_port}:3483/udp" \
-	       -p "${lms_host_firmware_port}:31337/tcp" \
+	       ${net} \
 	       "lmscommunity/logitechmediaserver:${lms_version}"
 	;;
     start|run)

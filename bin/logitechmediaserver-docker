@@ -2,6 +2,7 @@
 
 lms_version=${lms_version:-8.2.1}
 
+lms_hostname=${lms_hostname:lms}
 lms_config=${lms_config:-/music/config}
 lms_music=${lms_music:-/music/music}
 lms_playlist=${lms_playlist:-/music/playlist}
@@ -24,6 +25,7 @@ case "$1" in
     create)
 	docker create \
 	       --name logitechmediaserver \
+	       --hostname "${lms_hostname}" \
 	       -v "${lms_config}":"/config":rw \
 	       -v "${lms_music}":"/music":ro \
 	       -v "${lms_playlist}":"/playlist":rw \

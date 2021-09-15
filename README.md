@@ -1,12 +1,14 @@
 # logitechmediaserver-docker
 
-Logitechmediaserver in a container.
+Logitechmediaserver in a container using the [lmscommunity](https://hub.docker.com/r/lmscommunity/logitechmediaserver)
+image.
 
 ## Configuration
 
-Variables at the start of the `logitechmediaserver-docker` script allow these settings to be customised:
+Variables in `/etc/logitechmediaserver.conf` (on the host server) allow these settings to be customised:
 
-1. logitechmediaserver version
+1. logitechmediaserver image version
+2. hostname to be given to the container
 2. directories to mount from the host
 3. ports
 
@@ -23,6 +25,24 @@ $ logitechmediaserver-docker logs
 $ logitechmediaserver-docker stop
 ...
 $ logitechmediaserver-docker delete
+```
+
+## Favorites
+
+An existing favorites.opml file can be made available in the container by:
+
+```
+cp /etc/logitechmediaserver/favorites.opml <lms_config>/prefs/favorites.opml
+```
+
+where <lms_config> is the setting from `/etc/logitechmediaserver.conf`.
+
+## OpenRC
+
+To have the container start automatically:
+
+```
+rc-config add logitechmediaserver
 ```
 
 ## References

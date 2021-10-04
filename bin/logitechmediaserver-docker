@@ -59,7 +59,7 @@ case "$1" in
 	docker rm logitechmediaserver
 	;;
     logs)
-	docker logs -f logitechmediaserver
+	docker logs -n 1000 -f logitechmediaserver
 	;;
     settings)
 	set | egrep '^lms_' | sort

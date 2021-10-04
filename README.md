@@ -3,6 +3,11 @@
 Logitechmediaserver in a container using the [lmscommunity](https://hub.docker.com/r/lmscommunity/logitechmediaserver)
 image.
 
+## Running Docker on gentoo
+
+1. setup Docker on gentoo - see: https://wiki.gentoo.org/wiki/Docker
+2. check the new kernel configuration: /usr/share/docker/contrib/check-config.sh /usr/src/linux/.config
+
 ## Configuration
 
 Variables in `/etc/logitechmediaserver.conf` (on the host server) allow these settings to be customised:
@@ -47,5 +52,6 @@ rc-config add logitechmediaserver
 
 ## References
 
-1. https://hub.docker.com/r/lmscommunity/logitechmediaserver
-2. https://forums.slimdevices.com/showthread.php?111828-Official-docker-container-for-LMS
+1. https://wiki.gentoo.org/wiki/Docker
+2. https://hub.docker.com/r/lmscommunity/logitechmediaserver
+3. https://forums.slimdevices.com/showthread.php?111828-Official-docker-container-for-LMS

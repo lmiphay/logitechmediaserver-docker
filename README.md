@@ -50,8 +50,28 @@ To have the container start automatically:
 rc-config add logitechmediaserver
 ```
 
+## Logging
+
+The default "json-file" logging driver does *not* do log rotation.
+
+To select the "local" driver, with a max file size of 10MB and four files, add this to `/etc/docker/daemon.json`:
+
+```json
+{
+  "log-driver": "local",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "4"
+  }
+}
+```
+
+Note that this change *only* effects newly created containers and after docker is restarted.
+
 ## References
 
 1. https://wiki.gentoo.org/wiki/Docker
 2. https://hub.docker.com/r/lmscommunity/logitechmediaserver
 3. https://forums.slimdevices.com/showthread.php?111828-Official-docker-container-for-LMS
+4. https://docs.docker.com/config/containers/logging/configure/
+5. https://docs.docker.com/config/containers/logging/local/

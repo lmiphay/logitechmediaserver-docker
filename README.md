@@ -52,7 +52,7 @@ rc-config add logitechmediaserver
 
 ## Logging
 
-The default "json-file" logging driver does *not* do log rotation.
+The default docker "json-file" logging driver does *not* do log rotation.
 
 To select the "local" driver, with a max file size of 10MB and four files, add this to `/etc/docker/daemon.json`:
 

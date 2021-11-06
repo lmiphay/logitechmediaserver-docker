@@ -20,6 +20,20 @@ LMS_DOCKER_CONFIG=${LMS_DOCKER_CONFIG:-/etc/logitechmediaserver.conf}
 
 if [ -n "${LMS_DOCKER_CONFIG}" -a -f "${LMS_DOCKER_CONFIG}" ] ; then source "${LMS_DOCKER_CONFIG}" ; fi
 
+waitfordockerd()
+{
+    for (( count=1; count<=15; count++ )) ; do
+	if docker version >/dev/null 2>&1 ; then
+	    return
+	else
+	    echo "waiting for docker daemon to start"
+	    sleep 1
+	fi
+    done
+    echo "timed out waiting for docker daemon to start"
+    exit 1
+}
+
 case "$1" in
     pull)
 	docker pull "lmscommunity/logitechmediaserver:${lms_version}"
@@ -50,6 +64,7 @@ case "$1" in
 	[ ! -d "${lms_config}" ] && mkdir -p "${lms_config}"
 	[ ! -d "${lms_music}" ] && mkdir -p "${lms_music}"
 	[ ! -d "${lms_playlist}" ] && mkdir -p "${lms_playlist}"
+	waitfordockerd
 	docker start logitechmediaserver
 	;;
     stop)

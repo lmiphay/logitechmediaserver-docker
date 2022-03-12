@@ -66,6 +66,7 @@ case "$1" in
 	[ ! -d "${lms_playlist}" ] && mkdir -p "${lms_playlist}"
 	waitfordockerd
 	docker start logitechmediaserver
+	echo "listening on http://${HOSTNAME}:${lms_host_web_port}"
 	;;
     stop)
 	docker stop logitechmediaserver

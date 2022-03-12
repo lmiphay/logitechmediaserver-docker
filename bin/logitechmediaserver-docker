@@ -73,8 +73,8 @@ case "$1" in
     delete|rm)
 	docker rm logitechmediaserver
 	;;
-    logs)
-	docker logs -n 1000 -f logitechmediaserver
+    log*)
+	docker logs -n 1000 -f logitechmediaserver 2>&1
 	;;
     settings)
 	set | egrep '^lms_' | sort

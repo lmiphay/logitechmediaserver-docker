@@ -32,6 +32,19 @@ $ logitechmediaserver-docker stop
 $ logitechmediaserver-docker delete
 ```
 
+## Upgrade
+
+1. logitechmediaserver-docker stop
+2. logitechmediaserver-docker pull
+3. docker rename logitechmediaserver logitechmediaserver-8.2.1 # renames the old container
+4. logitechmediaserver-docker create
+5. logitechmediaserver-docker start
+
+Optional - to remove an old container and/or image:
+
+6. docker rm logitechmediaserver-8.2.1
+7. docker rmi logitechmediaserver/docker:8.2.1
+
 ## Favorites
 
 An existing favorites.opml file can be made available in the container by:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lms_version=${lms_version:-8.2.1}
+lms_version=${lms_version:-9.0.0}
 
 lms_hostname=${lms_hostname:lms}
 lms_config=${lms_config:-/music/config}
@@ -56,7 +56,7 @@ case "$1" in
 	       -v "${lms_music}":"/music":ro \
 	       -v "${lms_playlist}":"/playlist":rw \
 	       -v "/etc/localtime":"/etc/localtime":ro \
-	       -v "/etc/timezone":"/etc/timezone":ro \
+	       -v "/etc/localtime":"/etc/timezone":ro \
 	       ${net} \
 	       "lmscommunity/logitechmediaserver:${lms_version}"
 	;;

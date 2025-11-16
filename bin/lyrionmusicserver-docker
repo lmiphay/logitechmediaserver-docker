@@ -1,6 +1,6 @@
 #!/bin/bash
 
-lms_version=${lms_version:-9.0.0}
+lms_version=${lms_version:-9.0.4}
 
 lms_hostname=${lms_hostname:lms}
 lms_config=${lms_config:-/music/config}
@@ -16,7 +16,7 @@ lms_host_players_port=${lms_host_players_port:-3483} # TCP/UDP control channel f
 lms_host_firmware_port=${lms_host_firmware_port:-31337} # firmware updates
 # spotify 4070
 
-LMS_DOCKER_CONFIG=${LMS_DOCKER_CONFIG:-/etc/logitechmediaserver.conf}
+LMS_DOCKER_CONFIG=${LMS_DOCKER_CONFIG:-/etc/lyrionmusicserver.conf}
 
 if [ -n "${LMS_DOCKER_CONFIG}" -a -f "${LMS_DOCKER_CONFIG}" ] ; then source "${LMS_DOCKER_CONFIG}" ; fi
 
@@ -36,7 +36,7 @@ waitfordockerd()
 
 case "$1" in
     pull)
-	docker pull "lmscommunity/logitechmediaserver:${lms_version}"
+	docker pull "lmscommunity/lyrionmusicserver:${lms_version}"
 	;;
     create)
 	if [ "${lms_host_net}" = "TRUE" ] ; then
@@ -50,7 +50,7 @@ case "$1" in
 	       -p ${lms_host_firmware_port}:31337/tcp"
 	fi
 	docker create \
-	       --name logitechmediaserver \
+	       --name lyrionmusicserver \
 	       --hostname "${lms_hostname}" \
 	       -v "${lms_config}":"/config":rw \
 	       -v "${lms_music}":"/music":ro \
@@ -58,24 +58,24 @@ case "$1" in
 	       -v "/etc/localtime":"/etc/localtime":ro \
 	       -v "/etc/localtime":"/etc/timezone":ro \
 	       ${net} \
-	       "lmscommunity/logitechmediaserver:${lms_version}"
+	       "lmscommunity/lyrionmusicserver:${lms_version}"
 	;;
     start|run)
 	[ ! -d "${lms_config}" ] && mkdir -p "${lms_config}"
 	[ ! -d "${lms_music}" ] && mkdir -p "${lms_music}"
 	[ ! -d "${lms_playlist}" ] && mkdir -p "${lms_playlist}"
 	waitfordockerd
-	docker start logitechmediaserver
+	docker start lyrionmusicserver
 	echo "listening on http://${HOSTNAME}:${lms_host_web_port}"
 	;;
     stop)
-	docker stop logitechmediaserver
+	docker stop lyrionmusicserver
 	;;
     delete|rm)
-	docker rm logitechmediaserver
+	docker rm lyrionmusicserver
 	;;
     log*)
-	docker logs -n 1000 -f logitechmediaserver 2>&1
+	docker logs -n 1000 -f lyrionmusicserver 2>&1
 	;;
     settings)
 	set | egrep '^lms_' | sort

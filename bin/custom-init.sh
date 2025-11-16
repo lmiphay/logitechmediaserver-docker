@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# see: https://hub.docker.com/r/lmscommunity/logitechmediaserver
+# see: https://hub.docker.com/r/lmscommunity/lyrionmusicserver
 
 if [ ! -f /usr/bin/ffmpeg ] ; then
     apt-get update -qq

@@ -1,0 +1,16 @@
+[Unit]
+Description=Lyrionmusicserver Service
+After=network-online.target
+Description=Lyrionmusicserver Docker Appliance Service
+Documentation=man:lyrionmusicserver-docker(8)
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=LMS_DOCKER_CONFIG=/etc/lyrionmusicserver.conf
+WorkingDirectory=/var/tmp
+ExecStart=/usr/bin/lyrionmusicserver-docker start
+ExecStop=/usr/bin/lyrionmusicserver-docker stop
+
+[Install]
+WantedBy=multi-user.target
